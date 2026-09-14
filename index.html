@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zvapp</title>
+  <meta name="description" content="be seen.">
+  <meta property="og:title" content="zvapp">
+  <meta property="og:description" content="be seen.">
+  <meta name="theme-color" content="#060608">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #060608;
+      --zap:   #C8FF3E;
+      --white: #F0F0EC;
+      --dim:   #3A3A46;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Single glow — very subtle, behind everything ── */
+    body::before {
+      content: '';
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(200,255,62,0.07) 0%, transparent 65%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Main content ── */
+    .stage {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    /* ── Icon ── */
+    .icon-wrap {
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: appear 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    }
+
+    .icon-wrap svg {
+      display: block;
+    }
+
+    /* ── Wordmark ── */
+    .wordmark {
+      font-size: clamp(72px, 18vw, 148px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--white);
+      opacity: 0;
+      animation: appear 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+    }
+
+    .wordmark .accent {
+      color: var(--zap);
+    }
+
+    /* ── Tagline ── */
+    .tagline {
+      margin-top: 20px;
+      font-size: clamp(14px, 3.5vw, 18px);
+      font-weight: 300;
+      letter-spacing: 0.22em;
+      color: var(--dim);
+      opacity: 0;
+      animation: appear 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+    }
+
+    /* ── Separator ── */
+    .sep {
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(to bottom, transparent, var(--dim), transparent);
+      margin: 36px auto 0;
+      opacity: 0;
+      animation: appear 0.6s ease 0.65s forwards;
+    }
+
+    /* ── Sub-line ── */
+    .sub {
+      margin-top: 32px;
+      font-size: clamp(11px, 2.5vw, 13px);
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+      opacity: 0;
+      animation: appear 0.6s ease 0.75s forwards;
+    }
+
+    /* ── Spark blink on icon load ── */
+    @keyframes spark {
+      0%   { opacity: 0; transform: scale(0.6); }
+      40%  { opacity: 1; transform: scale(1.15); }
+      70%  { opacity: 1; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .spark-dot {
+      animation: spark 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+      transform-origin: center;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: fixed;
+      bottom: 28px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: #1E1E26;
+      z-index: 1;
+      opacity: 0;
+      animation: appear 1s ease 1.2s forwards;
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .icon-wrap, .wordmark, .tagline, .sep, .sub, footer, .spark-dot {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ── Mobile adjustments ── */
+    @media (max-width: 480px) {
+      .icon-wrap { margin-bottom: 32px; }
+      .sep { height: 24px; margin-top: 28px; }
+      .sub { margin-top: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="stage" role="main">
+
+    <!-- Icon -->
+    <div class="icon-wrap" aria-hidden="true">
+      <svg width="88" height="88" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- Background -->
+        <rect width="120" height="120" rx="26" fill="#0A0A0E"/>
+        <!-- Ambient glow -->
+        <ellipse cx="60" cy="56" rx="36" ry="32" fill="#C8FF3E" opacity="0.055"/>
+        <!-- Z top bar -->
+        <line x1="36" y1="30" x2="80" y2="30"
+          stroke="#C8FF3E" stroke-width="7.5" stroke-linecap="round"/>
+        <!-- Z diagonal -->
+        <line x1="80" y1="30" x2="40" y2="78"
+          stroke="#C8FF3E" stroke-width="7.5" stroke-linecap="round"/>
+        <!-- Z bottom bar -->
+        <line x1="40" y1="78" x2="84" y2="78"
+          stroke="#C8FF3E" stroke-width="7.5" stroke-linecap="round"/>
+        <!-- Spark dot — animiert -->
+        <g class="spark-dot" filter="url(#glow)">
+          <circle cx="84" cy="78" r="5.5" fill="#C8FF3E"/>
+          <circle cx="84" cy="78" r="11"  fill="#C8FF3E" opacity="0.18"/>
+        </g>
+        <!-- Energy lines -->
+        <line x1="84" y1="24" x2="91" y2="17"
+          stroke="#C8FF3E" stroke-width="3.5" stroke-linecap="round" opacity="0.45"/>
+        <line x1="91" y1="28" x2="99" y2="23"
+          stroke="#C8FF3E" stroke-width="3.5" stroke-linecap="round" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <!-- Wordmark -->
+    <h1 class="wordmark">
+      zv<span class="accent">app</span>
+    </h1>
+
+    <!-- Tagline -->
+    <p class="tagline">be seen</p>
+
+    <!-- Visual separator -->
+    <div class="sep" aria-hidden="true"></div>
+
+    <!-- Teaser -->
+    <p class="sub">next level dating &nbsp;·&nbsp; coming soon</p>
+
+  </main>
+
+  <footer>© 2026 zvapp &nbsp;·&nbsp; orbiq gmbh</footer>
+
+</body>
+</html>
